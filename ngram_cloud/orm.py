@@ -68,15 +68,3 @@ class DataController(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.db.close_session()
-
-
-class VocabWord:
-    def __init__(self, word, occurrences):
-        self.word = word
-        self.occurrences = occurrences
-
-
-class VocabController(DataController):
-    def list(self):
-        return [VocabWord(v.word, v.hits)
-                for v in self.db.list_vocab()]
