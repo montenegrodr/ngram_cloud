@@ -10,7 +10,7 @@ passwd = os.getenv('DB_PASSWD', '')
 user = os.getenv('DB_USER', 'root')
 batch_size = os.getenv('BATCH_SIZE', 1000)
 database = os.getenv('DB_NAME', 'reclameaqui')
-csv_output = os.getenv('OUTPUTFILE', 'reclameaqui.csv')
+csv_output = os.getenv('OUTPUTFILE', 'data.csv')
 header = ['id', 'business', 'location', 'date', 'title', 'complaint_body',
           'final_answer', 'solved', 'again', 'rate', 'url', 'created_at',
           'store_id', 'complaint_page_id']
