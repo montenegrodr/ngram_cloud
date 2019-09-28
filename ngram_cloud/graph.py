@@ -54,29 +54,23 @@ class Graph:
     def get_vertices(self):
         return self.vert_dict.keys()
 
-
-if __name__ == '__main__':
-    g = Graph()
-
-    # g.add_vertex('atendimento')
-    # g.add_vertex('bom')
-    # g.add_vertex('reclame')
-    # g.add_vertex('otimo')
-
-    g.add_edge('atendimento', 'bom', 7)
-    g.add_edge('atendimento', 'reclame', 9)
-    g.add_edge('bom', 'otimo', 14)
-    g.add_edge('reclame', 'aqui', 10)
-
-    # for v in g:
-    #     for w in v.get_connections():
-    #         vid = v.get_id()
-    #         wid = w.get_id()
-    #         print('( %s , %s, %3d)'  % (vid, wid, v.get_weight(w)))
-
-    for v in g:
-        print('%s\t%s' % (
-            v.get_id(),
-            [(k.id, v) for (k, v) in g.vert_dict[v.get_id()].adjacent.items()]
+    @staticmethod
+    def from_associations(associations):
+        g = Graph()
+        for a in associations:
+            g.add_edge(
+                frm=a.word1,
+                to=a.word2,
+                cost=a.occurrences
             )
-        )
+        return g
+
+    def to_json(self):
+        j = {}
+        for vertex in self:
+            word = vertex.get_id().word
+            j[word] = dict(
+                (k.id.word, w) for (k, w) in
+                self.vert_dict[vertex.get_id()].adjacent.items()
+            )
+        return j

@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import or_, and_
 
 Base = declarative_base()
 host = os.getenv('HOST', '')
@@ -55,6 +56,21 @@ class Database(object):
 
     def list_vocab(self):
         return self.session.query(Vocab).all()
+
+    def find_word_vocab(self, word):
+        return self.session.query(Vocab).filter(Vocab.word == word).first()
+
+    def list_associations(self, word_id, limit, solved, rate):
+        return self.session.query(Association).filter(
+            and_(
+                or_(
+                    Association.word1_id == word_id,
+                    Association.word2_id == word_id
+                ),
+                Association.solved == solved,
+                Association.rate == rate
+            )
+        ).order_by(Association.hits.desc()).limit(limit)
 
 
 class DataController(object):
