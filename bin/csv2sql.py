@@ -53,8 +53,8 @@ def main():
     print('Starting to load vocab into database')
 
     solved_map = {
-        'resolvida': 0,
-        'nao-resolvida': 1
+        'resolvida': 1,
+        'nao-resolvida': 0
     }
 
     with open(vocab_input) as f:
