@@ -60,12 +60,17 @@ class Association:
 
 
 class CloudController(orm.DataController):
-    def cloud(self, word):
+    def cloud(self, word, rate, solved):
 
         with VocabController() as vc:
             vocab_word = vc.find(word)
 
-        associations = set(self.list(vocab_word.id))
+        associations = set(self.list(
+            word_id=vocab_word.id,
+            rate=rate,
+            solved=solved
+        ))
+
         neighbors_ids = set(itertools.chain.from_iterable(
             [[a.word1.id, a.word2.id] for a in associations]
         ))
@@ -73,7 +78,7 @@ class CloudController(orm.DataController):
         neighbors_ids.remove(vocab_word.id)
 
         for neighbor_id in neighbors_ids:
-            for a in set(self.list(neighbor_id)):
+            for a in set(self.list(neighbor_id, rate=rate, solved=solved)):
                 associations.add(a)
 
         return graph.Graph.from_associations(associations)

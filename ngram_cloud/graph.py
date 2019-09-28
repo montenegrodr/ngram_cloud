@@ -1,4 +1,10 @@
 # source: https://www.bogotobogo.com/python/python_graph_data_structures.php
+import io
+import matplotlib
+import networkx as nx
+import matplotlib.pyplot as plt
+
+matplotlib.use('agg')
 
 
 class Vertex:
@@ -74,3 +80,28 @@ class Graph:
                 self.vert_dict[vertex.get_id()].adjacent.items()
             )
         return j
+
+    def to_img_bytes(self):
+        img = io.BytesIO()
+        G = nx.Graph()
+        for word, neighbors in self.to_json().items():
+            for neighbor, weight in neighbors.items():
+                G.add_edge(word, neighbor, weight=weight)
+
+        edges = [(u, v) for (u, v, d) in G.edges(data=True)]
+        pos = nx.spring_layout(G)  # positions for all nodes
+
+        # nodes
+        nx.draw_networkx_nodes(G, pos, node_size=200, node_color='#00b4d9')
+
+        # edges
+        nx.draw_networkx_edges(G, pos, edgelist=edges, width=1, alpha=0.5)
+
+        # labels
+        nx.draw_networkx_labels(G, pos, font_size=7, font_family='sans-serif')
+
+        plt.axis('off')
+        plt.savefig(img, format='png', dpi=300)
+        plt.close()
+        img.seek(0)
+        return img
