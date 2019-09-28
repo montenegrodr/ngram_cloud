@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Boolean
 
 Base = declarative_base()
-host = os.getenv('HOST', '')
+host = os.getenv('DB_HOST', '')
 passwd = os.getenv('DB_PASSWD', '')
 user = os.getenv('DB_USER', 'root')
 database = os.getenv('DB_NAME', 'bigrams')

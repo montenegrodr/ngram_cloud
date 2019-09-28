@@ -5,7 +5,7 @@ import csv
 import mysql.connector
 
 
-host = os.getenv('HOST', '')
+host = os.getenv('DB_HOST', '')
 passwd = os.getenv('DB_PASSWD', '')
 user = os.getenv('DB_USER', 'root')
 batch_size = os.getenv('BATCH_SIZE', 1000)

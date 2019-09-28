@@ -1,10 +1,14 @@
+import sys
 import json
-
+import logging
 import cherrypy
 import ngram_cloud.controllers as controllers
 
 
 class App(object):
+    def __init__(self, logger):
+        self.logger = logger
+
     @cherrypy.expose
     def vocab(self):
         with controllers.VocabController() as vocab_controller:
@@ -25,5 +29,23 @@ class App(object):
             return retobj
 
 
-cherrypy.quickstart(App())
+def main(logger):
+    logger.info('Starting application..')
+    cherrypy.quickstart(App(logger))
 
+
+def setup_logger():
+    logger = logging.getLogger('ngram_cloud')
+    logger.setLevel(logging.INFO)
+    formatter = logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s'
+    )
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
+
+if __name__ == '__main__':
+    main(setup_logger())
