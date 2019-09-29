@@ -17,7 +17,7 @@ class App(object):
             return json.dumps(vocab).encode('utf-8')
 
     @cherrypy.expose
-    def cloud(self, word, rate=None, solved=None, output='png'):
+    def graph(self, word, rate=None, solved=None, output='png'):
         try:
             with controllers.CloudController() as cloud_controller:
                 graph = cloud_controller.cloud(word, rate, solved)
