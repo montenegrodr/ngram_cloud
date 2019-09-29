@@ -3,7 +3,7 @@ DB_PASSWD   ?=
 DB_USER     ?= root
 DB_NAME     ?= bigrams
 REGISTRY    ?= montenegrodr
-VERSION     ?= 0.2
+VERSION     ?= 0.3
 REPOSITORY  ?= ngram_cloud
 
 .PHONY: run
