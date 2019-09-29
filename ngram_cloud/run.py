@@ -17,16 +17,34 @@ class App(object):
             return json.dumps(vocab).encode('utf-8')
 
     @cherrypy.expose
-    def cloud(self, word, rate=None, solved=None):
-        with controllers.CloudController() as cloud_controller:
-            graph = cloud_controller.cloud(word, rate, solved)
+    def cloud(self, word, rate=None, solved=None, output='png'):
+        try:
+            with controllers.CloudController() as cloud_controller:
+                graph = cloud_controller.cloud(word, rate, solved)
+            if output == 'json' or 'application/json' in cherrypy.serving.request.headers.get('Accept'):
+                cherrypy.serving.response.headers['Content-type'] = 'application/json; chartset=utf-8'
+                return json.dumps(graph.to_json()).encode('utf-8')
+            else:
+                return cherrypy.lib.static.serve_fileobj(
+                    graph.to_img_bytes(),
+                    content_type='png',
+                    name='cloud.png'
+                )
 
-        if False:
-            cherrypy.serving.response.headers['Content-type'] = 'application/json; chartset=utf-8'
-            return json.dumps(graph.to_json()).encode('utf-8')
-        else:
-            retobj = cherrypy.lib.static.serve_fileobj(graph.to_img_bytes(), content_type='png', name='cloud.png')
-            return retobj
+        except controllers.NgramCloudException as exp:
+            self.logger.info(exp)
+            cherrypy.serving.response.status = 400
+            return json.dumps({
+                'error': str(exp)
+            })
+        except Exception as exp:
+            # Not good to catch all exceptions, but this
+            # is the last customer facing layer
+            self.logger.info(exp)
+            cherrypy.serving.response.status = 500
+            return json.dumps({
+                'error': 'Unknown error'
+            })
 
 
 def main(logger):

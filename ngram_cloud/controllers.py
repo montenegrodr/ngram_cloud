@@ -29,7 +29,7 @@ class VocabController(orm.DataController):
         vocab_word = self.db.find_word_vocab(word)
         if not vocab_word:
             raise NgramCloudException(
-                f'{word} does not exist in Vocabulary')
+                f'`{word}` does not exist in Vocabulary')
         return VocabWord(vocab_word.word,
                          vocab_word.hits,
                          vocab_word.id)
@@ -41,7 +41,7 @@ class VocabController(orm.DataController):
                 return vocab_word
         else:
             NgramCloudException(
-                f'No word with id: {id} found in Vocabulary')
+                f'No word with id `{id}` found in Vocabulary')
 
 
 class Association:
