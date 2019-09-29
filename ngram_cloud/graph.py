@@ -1,4 +1,4 @@
-# source: https://www.bogotobogo.com/python/python_graph_data_structures.php
+# Code adapted from https://www.bogotobogo.com/python/python_graph_data_structures.php
 import io
 import matplotlib
 import networkx as nx

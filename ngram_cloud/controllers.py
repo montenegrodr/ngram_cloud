@@ -75,7 +75,8 @@ class CloudController(orm.DataController):
             [[a.word1.id, a.word2.id] for a in associations]
         ))
 
-        neighbors_ids.remove(vocab_word.id)
+        if vocab_word.id in neighbors_ids:
+            neighbors_ids.remove(vocab_word.id)
 
         for neighbor_id in neighbors_ids:
             for a in set(self.list(neighbor_id, rate=rate, solved=solved)):
